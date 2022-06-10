@@ -9,6 +9,6 @@ def index(request):
 
 
 def room(request, room_name):
-    return render(request, 'chat/room.html', {
+    return render(request, 'lobby/room.html', {
         'room_name': room_name
     })
