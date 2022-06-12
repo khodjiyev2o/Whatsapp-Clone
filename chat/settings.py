@@ -53,6 +53,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'chat.urls'
 ASGI_APPLICATION = "chat.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
