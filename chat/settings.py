@@ -53,11 +53,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'chat.urls'
 ASGI_APPLICATION = "chat.asgi.application"
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }
-}
+
 
 
 TEMPLATES = [
