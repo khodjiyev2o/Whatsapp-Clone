@@ -96,7 +96,9 @@
 			</span>
 		  </div>
 		</div>
-		<div id="chat-log">
+
+		<div class="chat-log">
+
 		  <div class="row no-gutters">
 			<div class="col-md-3">
 			  <div class="chat-bubble chat-bubble--left">
@@ -104,6 +106,7 @@
 			  </div>
 			</div>
 		  </div>
+
 		  <div class="row no-gutters">
 			<div class="col-md-3 offset-md-9">
 			  <div class="chat-bubble chat-bubble--right">
@@ -111,41 +114,7 @@
 			  </div>
 			</div>
 		  </div>
-		  <div class="row no-gutters">
-			<div class="col-md-3 offset-md-9">
-			  <div class="chat-bubble chat-bubble--right">
-				Hello dude!
-			  </div>
-			</div>
-		  </div>
-		  <div class="row no-gutters">
-			<div class="col-md-3">
-			  <div class="chat-bubble chat-bubble--left">
-				Hello dude!
-			  </div>
-			</div>
-		  </div>
-		  <div class="row no-gutters">
-			<div class="col-md-3">
-			  <div class="chat-bubble chat-bubble--left">
-				Hello dude!
-			  </div>
-			</div>
-		  </div>
-		  <div class="row no-gutters">
-			<div class="col-md-3">
-			  <div class="chat-bubble chat-bubble--left">
-				Hello dude!
-			  </div>
-			</div>
-		  </div>
-		  <div class="row no-gutters">
-			<div class="col-md-3 offset-md-9">
-			  <div class="chat-bubble chat-bubble--right">
-				Hello dude!
-			  </div>
-			</div>
-		  </div>
+
 		  <div class="row">
 			<div class="col-12">
 			  <div class="chat-box-tray">
@@ -180,8 +149,28 @@
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data);
             console.log(data['message'])
-            var chatlog = document.querySelector('#chat-log')
-            chatlog.value += data['user']+ ':' + data['message'] + '\n'
+            message=data['message']
+            var chatlog = document.querySelector('.chat-log')
+			var row = document.querySelector('.chat-bubble.chat-bubble--right')
+
+            if (data['user'] == '{{request.user}}') {
+
+            row.innerHTML = message
+
+
+
+
+										}
+
+			else{
+			  row.innerHTML= message
+
+
+
+			}
+			chatlog.innerHTML =+ `row`
+
+
         }
 
 
