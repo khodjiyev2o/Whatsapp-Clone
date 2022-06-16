@@ -114,7 +114,7 @@ hr {
   margin: 10px 30px;
   border-radius: 9px;
   position: relative;
-  animation: fadeIn 1s ease-in;
+  
 }
 .chat-bubble:after {
   content: "";
@@ -173,3 +173,12 @@ hr {
 .chat-box-tray i:last-of-type {
   margin-left: 25px;
 }
+.chat-panel{
+height:515px;
+overflow-y: auto;
+}
+
+.disabled{
+  pointer-events:none;
+}
+

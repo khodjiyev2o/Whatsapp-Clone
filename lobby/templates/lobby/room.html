@@ -97,7 +97,7 @@
 		  </div>
 		</div>
 
-		<div class="chat-log">
+		<div class="chat-panel">
 		{%for message in messages%}
 			{% if not  message.owner == request.user %}
 			  <div class="row no-gutters">
@@ -117,6 +117,7 @@
 			  </div>
 			{%endif%}
 		{%endfor%}
+		</div>
 		  <div class="row">
 			<div class="col-12">
 			  <div class="chat-box-tray">
@@ -126,8 +127,9 @@
 
 
 
-					  <i class="material-icons" id="chat-message-submit"> <a href="#" class="counter">send</a></i>
 
+
+						 <i class="material-icons" id="chat-message-submit" ><a href="" class="counter">send</a></i>
 
 
 
@@ -137,7 +139,7 @@
 		</div>
 	  </div>
 	</div>
-  </div>
+
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
 <script  src="{%static 'js/script.js'%}"></script>
@@ -152,18 +154,31 @@
             const data = JSON.parse(e.data);
             console.log(data['message'])
             message=data['message']
-            var chatlog = document.querySelector('.chat-log')
-			var row = document.querySelector('.chat-bubble.chat-bubble--right')
-			row.innerText = data['message']
-
-
+            user = data['user']
+            if(user == '{{request.user}}'){
+            		var	html='<div class="row no-gutters">'
+				html+='<div class="col-md-3 offset-md-9">'
+				html += '<div class="chat-bubble chat-bubble--right">' + message + '</div>'
+				html+='</div> </div>'
+            }
+            else{
+			var	html='<div class="row no-gutters">'
+				html+='<div class="col-md-3">'
+				html += '<div class="chat-bubble chat-bubble--left">' + message + '</div>'
+				html+='</div> </div>'
+				}
+			chatPanel=document.querySelector('.chat-panel')
+			chatPanel.innerHTML+=html
+			scrollTop()
 		}
 
 
 
          document.querySelector('#chat-message-input').focus();
         document.querySelector('#chat-message-input').onkeyup = function(e) {
+
             if (e.keyCode === 13) {  // enter, return
+            	e.preventDefault();
                 document.querySelector('#chat-message-submit').click();
             }
         };
@@ -171,12 +186,16 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'user' : '{{request.user}}',
-                'room' : roomName
-            }));
-            messageInputDom.value = '';
+            if(message){
+            	chatSocket.send(JSON.stringify({
+					'message': message,
+					'user' : '{{request.user}}',
+					'room' : roomName
+				}));
+				messageInputDom.value = '';
+				}
+           		 else{
+				};
         };
 
 
@@ -190,6 +209,18 @@ $(document).on('click', '.counter',function(e){
 
     // Do more stuff every anchor click here...
 });
+
+
+//scroll bottom
+function scrollTop(){
+
+chatPanel=document.querySelector('.chat-panel')
+chatPanel.scrollTop = chatPanel.scrollHeight;
+}
+
+scrollTop()
+
+
 </script>
 </body>
 </html>
