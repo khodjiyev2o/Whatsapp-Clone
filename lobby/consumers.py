@@ -1,7 +1,9 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from channels.db import database_sync_to_async
+from .models import Room,Message
+from django.contrib.auth.models import User
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -29,6 +31,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data['message']
         user = text_data['user']
 
+        room = text_data['room']
+        message = Message.objects.create(context=message, owner=self.scope['user'], room=self.room_name)
         await  self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -49,6 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 
+
     async def disconnect(self,close_code):
 
         # Join room group
@@ -56,6 +61,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
-
 

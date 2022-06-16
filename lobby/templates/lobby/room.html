@@ -98,23 +98,25 @@
 		</div>
 
 		<div class="chat-log">
-
-		  <div class="row no-gutters">
-			<div class="col-md-3">
-			  <div class="chat-bubble chat-bubble--left">
-				Hello dude!
+		{%for message in messages%}
+			{% if not  message.owner == request.user %}
+			  <div class="row no-gutters">
+				<div class="col-md-3">
+				  <div class="chat-bubble chat-bubble--left">
+					{{message.context}}
+				  </div>
+				</div>
 			  </div>
-			</div>
-		  </div>
-
-		  <div class="row no-gutters">
-			<div class="col-md-3 offset-md-9">
-			  <div class="chat-bubble chat-bubble--right">
-				Hello dude!
+			{%else%}
+			  <div class="row no-gutters">
+				<div class="col-md-3 offset-md-9">
+				  <div class="chat-bubble chat-bubble--right">
+					{{message.context}}
+				  </div>
+				</div>
 			  </div>
-			</div>
-		  </div>
-
+			{%endif%}
+		{%endfor%}
 		  <div class="row">
 			<div class="col-12">
 			  <div class="chat-box-tray">
@@ -152,26 +154,10 @@
             message=data['message']
             var chatlog = document.querySelector('.chat-log')
 			var row = document.querySelector('.chat-bubble.chat-bubble--right')
-
-            if (data['user'] == '{{request.user}}') {
-
-            row.innerHTML = message
+			row.innerText = data['message']
 
 
-
-
-										}
-
-			else{
-			  row.innerHTML= message
-
-
-
-			}
-			chatlog.innerHTML =+ `row`
-
-
-        }
+		}
 
 
 
@@ -187,7 +173,8 @@
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'user' : '{{request.user}}'
+                'user' : '{{request.user}}',
+                'room' : roomName
             }));
             messageInputDom.value = '';
         };
