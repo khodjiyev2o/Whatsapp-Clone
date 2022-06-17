@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from .models import Room,Message
 from django.contrib.auth.models import User
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
 

@@ -10,6 +10,7 @@ class Room(models.Model):
     def __str__(self):
         return str(self.roomname)
 
+
 class Message(models.Model):
     context = models.CharField(max_length=150)
     owner = models.ForeignKey(User,on_delete = models.CASCADE)

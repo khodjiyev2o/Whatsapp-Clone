@@ -114,7 +114,7 @@ hr {
   margin: 10px 30px;
   border-radius: 9px;
   position: relative;
-  
+
 }
 .chat-bubble:after {
   content: "";
