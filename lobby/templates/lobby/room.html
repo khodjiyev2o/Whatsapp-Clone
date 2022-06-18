@@ -143,19 +143,27 @@
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
 <script  src="{%static 'js/script.js'%}"></script>
- {{ room_name|json_script:"room-name" }}
-<script>
- 	const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-        );
+<script>
+
+
+	let loc = window.location
+	let wsStart = 'ws://'
+
+	if(loc.protocol === 'https') {
+		wsStart = 'wss://'
+	}
+	let endpoint = wsStart + loc.host + loc.pathname
+        const chatSocket = new WebSocket(endpoint);
+
+
         chatSocket.onmessage = function(e){
             const data = JSON.parse(e.data);
             console.log(data['message'])
             message=data['message']
-            user = data['user']
-            if(user == '{{request.user}}'){
+            sent_by_user = data['sent_by_user']
+            sent_to_user = data['sent_to_user']
+            if(sent_by_user == '{{request.user.id}}'){
             		var	html='<div class="row no-gutters">'
 				html+='<div class="col-md-3 offset-md-9">'
 				html += '<div class="chat-bubble chat-bubble--right">' + message + '</div>'
@@ -189,8 +197,8 @@
             if(message){
             	chatSocket.send(JSON.stringify({
 					'message': message,
-					'user' : '{{request.user}}',
-					'room' : roomName
+					'sent_by_id' : '{{request.user.id}}',
+					'sent_to_id' : '{{request.user.id}}',
 				}));
 				messageInputDom.value = '';
 				}

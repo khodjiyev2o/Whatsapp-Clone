@@ -5,8 +5,8 @@ from channels.db import database_sync_to_async
 from .models import Room,Message
 from django.contrib.auth.models import User
 
-
-class ChatConsumer(AsyncWebsocketConsumer):
+"""
+class GroupConsumer(AsyncWebsocketConsumer):
     async def connect(self):
 
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -73,3 +73,66 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = User.objects.get(username=user)
 
         Message.objects.create(room=room,owner=username,context=message)
+"""
+
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        user = self.scope['user']
+        self.chat_room = f'chat_{user.id}'
+
+        await self.channel_layer.group_add(
+            self.chat_room,
+            self.channel_name,
+
+        )
+        print('connected',self.chat_room)
+
+        await self.accept()
+
+
+
+
+
+
+    async def receive(self,text_data):
+
+        text_data = json.loads(text_data)
+        message = text_data['message']
+        sent_by_id = text_data['sent_by_id']
+        sent_to_id = text_data['sent_to_id']
+        print(message,'from',sent_by_id,'to',sent_to_id)
+        another_user = f'chat_{sent_to_id}'
+        response={
+            'message': message,
+            'sent_by_user': sent_by_id,
+            'sent_to_user': sent_to_id,
+        }
+        await  self.channel_layer.group_send(
+            another_user,
+            {
+                'type': 'chat_message',
+                'text': json.dumps(response)
+            }
+        )
+
+        await  self.channel_layer.group_send(
+            self.chat_room,
+            {
+                'type': 'chat_message',
+                'text': json.dumps(response)
+            }
+        )
+
+
+    async def chat_message(self, event):
+        await self.send(event['text'])
+        print('chat_message',event)
+
+
+
+
+
+    async def disconnect(self,close_code):
+        print('disconnected')
+        # Join room group
