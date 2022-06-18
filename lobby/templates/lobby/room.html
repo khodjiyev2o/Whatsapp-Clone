@@ -194,11 +194,15 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
+            var another_user = 2
+            if('{{request.user.id}}' == 2){
+            	another_user = 1
+            }
             if(message){
             	chatSocket.send(JSON.stringify({
 					'message': message,
 					'sent_by_id' : '{{request.user.id}}',
-					'sent_to_id' : '{{request.user.id}}',
+					'sent_to_id' : another_user,
 				}));
 				messageInputDom.value = '';
 				}
