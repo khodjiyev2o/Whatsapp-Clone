@@ -2,7 +2,7 @@ import json
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import Message
+from .models import Message ,Thread
 from django.contrib.auth.models import User
 
 """
@@ -101,12 +101,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data['message']
         sent_by_id = text_data['sent_by_id']
         sent_to_id = text_data['sent_to_id']
-        print(message,'from',sent_by_id,'to',sent_to_id)
+        thread_id = text_data['thread_id']
+
         another_user = f'chat_{sent_to_id}'
+        await self.message_save(sent_by_id,thread_id,message)
         response={
             'message': message,
             'sent_by_user': sent_by_id,
             'sent_to_user': sent_to_id,
+            'thread_id' : thread_id,
         }
         await  self.channel_layer.group_send(
             another_user,
@@ -136,3 +139,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self,close_code):
         print('disconnected')
         # Join room group
+
+    @sync_to_async
+    def message_save(self, user, thread_id, message):
+        username = User.objects.get(id=user)
+        thread = Thread.objects.get(id=thread_id)
+        Message.objects.create(thread=thread, owner=username, context=message)

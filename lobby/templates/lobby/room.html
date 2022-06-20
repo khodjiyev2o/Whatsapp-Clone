@@ -61,7 +61,7 @@
 
 	{%for th in thread%}
 	  <div class="col-md-8">
-		<div class="settings-tray" data-id="{{ th.id }}">
+		<div class="settings-tray" chat-id="chat_{{ th.id }}">
 			<div class="friend-drawer no-gutters friend-drawer--grey" >
 			<img class="profile-image" src="{%static 'image/user1.jpg' %}" alt="">
 
@@ -189,6 +189,7 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             var another_user = 2
+           	var thread_id =  get_active_thread_id()
             if('{{request.user.id}}' == 2){
             	another_user = 1
             }
@@ -197,6 +198,7 @@
 					'message': message,
 					'sent_by_id' : '{{request.user.id}}',
 					'sent_to_id' : another_user,
+					'thread_id' : thread_id ,
 				}));
 				messageInputDom.value = '';
 				}
@@ -227,11 +229,11 @@ chatPanel.scrollTop = chatPanel.scrollHeight;
 scrollTop()
 
 function get_active_thread_id(){
-    let chat_id = $('.messages-wrapper.is_active').attr('chat-id')
-    let thread_id = chat_id.replace('chat_', '')
-    return thread_id
+	let chat_id = $('.settings-tray')
+	var threads_id = chat_id[1].getAttribute("chat-id")
+	let thread_id = threads_id.replace('chat_', '')
+	return thread_id
 }
-
 </script>
 </body>
 </html>
