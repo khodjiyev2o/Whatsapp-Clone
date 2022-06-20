@@ -6,9 +6,6 @@ from django.db.models import Q
 # Register your models here.
 
 
-class ChatMessage(admin.TabularInline):
-    model = Message
-
 
 class ThreadForm(forms.ModelForm):
     def clean(self):
@@ -25,12 +22,6 @@ class ThreadForm(forms.ModelForm):
 
 
 
-class ThreadAdmin(admin.ModelAdmin):
-    inlines = [ChatMessage]
 
-    class Meta:
-        model = Thread
-
-
-admin.site.register(Thread, ThreadAdmin)
+admin.site.register(Thread)
 admin.site.register(Message)

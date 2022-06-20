@@ -5,7 +5,8 @@ from .models import Message ,Thread
 
 
 def room(request):
-    thread = Thread.objects.by_user(user=request.user).prefetch_related('chatmessage_thread').order_by('timestamp')
+    thread = Thread.objects.by_user(user=request.user).prefetch_related('message_thread').order_by('timestamp')
+
     context = {
         'thread' : thread,
     }

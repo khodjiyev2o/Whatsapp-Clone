@@ -22,25 +22,17 @@ class Thread(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        constraints = [
-            UniqueConstraint(
-                Lower('first_person'),
-                Lower('second_person'),
-                name='first_second_name_unique',
-            ),
-            UniqueConstraint(
-                Lower('second_person'),
-                Lower('first_person'),
-                name='second_first_name_unique',
-            ),
-        ]
-        unique_together = ('first_person', 'second_person')
+
+        unique_together = (
+            ('first_person', 'second_person'),
+            ('second_person', 'first_person'),
+        )
 
 
 class Message(models.Model):
     context = models.CharField(max_length=150)
     owner = models.ForeignKey(User,on_delete = models.CASCADE)
-    thread = models.ForeignKey(Thread,on_delete = models.CASCADE,blank=True, null=True,related_name='chatmessage_thread')
+    thread = models.ForeignKey(Thread,on_delete = models.CASCADE,blank=True, null=True,related_name='message_thread')
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
