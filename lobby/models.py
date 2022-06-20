@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
-from django.db.models import Q
+from django.db.models import Q, UniqueConstraint
+from django.db.models.functions import Lower
 
 
 class ThreadManager(models.Manager):
@@ -21,6 +22,18 @@ class Thread(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                Lower('first_person'),
+                Lower('second_person'),
+                name='first_second_name_unique',
+            ),
+            UniqueConstraint(
+                Lower('second_person'),
+                Lower('first_person'),
+                name='second_first_name_unique',
+            ),
+        ]
         unique_together = ('first_person', 'second_person')
 
 

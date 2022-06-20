@@ -10,6 +10,15 @@
 </head>
 <body>
 <!-- partial:index.partial.html -->
+
+{%for th in thread%}
+{% for chat in th.message_thread.all %}
+{{chat.context}}
+{%endfor%}
+{%endfor%}
+
+
+
 <div class="container">
 	<div class="row no-gutters">
 	  <div class="col-md-4 border-right">
