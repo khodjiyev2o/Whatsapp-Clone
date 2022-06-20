@@ -18,10 +18,13 @@
 	  <div class="col-md-4 border-right">
 		<div class="settings-tray">
 		  <img class="profile-image" src="{%static 'image/profile_photo.jpg' %}" alt="Profile img">
+			{{request.user}}
 		  <span class="settings-tray--right">
+
 			<i class="material-icons">cached</i>
 			<i class="material-icons">message</i>
 			<i class="material-icons">menu</i>
+
 		  </span>
 		</div>
 		<div class="search-box">
@@ -46,7 +49,8 @@
 			  {%else%}
 			  	<h6>{{th.first_person}}</h6>
 			  {%endif%}
-			<p class="text-muted">Hey, you're arrested!</p>
+
+			<p class="text-muted">{{th.message_thread.last}}</p>
 		  </div>
 		  <span class="time text-muted small">13:21</span>
 		</div>
@@ -54,13 +58,28 @@
 
 		{%endfor%}
 		</div>
+
+	{%for th in thread%}
 	  <div class="col-md-8">
-		<div class="settings-tray">
-			<div class="friend-drawer no-gutters friend-drawer--grey">
+		<div class="settings-tray" data-id="{{ th.id }}">
+			<div class="friend-drawer no-gutters friend-drawer--grey" >
 			<img class="profile-image" src="{%static 'image/user1.jpg' %}" alt="">
+
 			<div class="text">
-			  <h6>Robo Cop</h6>
-			  <p class="text-muted">Layin' down the law since like before Christ...</p>
+				{%if request.user == th.first_person%}
+				<h6>{{th.second_person}}</h6>
+			  {%else%}
+			  	<h6>{{th.first_person}}</h6>
+			  {%endif%}
+			  {%if request.user == th.first_person%}
+			  <p class="text-muted">
+				  {{th.second_person.email}}
+			  </p>
+				{%else%}
+				 <p class="text-muted">
+				  {{th.first_person.email}}
+			  </p>
+				{%endif%}
 			</div>
 			<span class="settings-tray--right">
 			  <i class="material-icons">cached</i>
@@ -73,7 +92,7 @@
 		<div class="chat-panel">
 		{%for message in messages%}
 			{% if not  message.owner == request.user %}
-			  <div class="row no-gutters">
+			  <div class="row no-gutters"  >
 				<div class="col-md-3">
 				  <div class="chat-bubble chat-bubble--left">
 					{{message.context}}
@@ -90,6 +109,8 @@
 			  </div>
 			{%endif%}
 		{%endfor%}
+
+			{%endfor%}
 		</div>
 		  <div class="row">
 			<div class="col-12">
@@ -205,6 +226,11 @@ chatPanel.scrollTop = chatPanel.scrollHeight;
 
 scrollTop()
 
+function get_active_thread_id(){
+    let chat_id = $('.messages-wrapper.is_active').attr('chat-id')
+    let thread_id = chat_id.replace('chat_', '')
+    return thread_id
+}
 
 </script>
 </body>

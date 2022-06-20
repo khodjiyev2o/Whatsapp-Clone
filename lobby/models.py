@@ -22,7 +22,6 @@ class Thread(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-
         unique_together = (
             ('first_person', 'second_person'),
             ('second_person', 'first_person'),

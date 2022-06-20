@@ -181,4 +181,11 @@ overflow-y: auto;
 .disabled{
   pointer-events:none;
 }
+.is_active{
+  display: block !important;
+}
+
+.hide{
+  display: none;
+}
 

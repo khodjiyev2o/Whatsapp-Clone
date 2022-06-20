@@ -6,22 +6,17 @@ from django.db.models import Q
 # Register your models here.
 
 
-
-class ThreadForm(forms.ModelForm):
-    def clean(self):
-
-            super(ThreadForm, self).clean()
-            first_person = self.cleaned_data.get('first_person')
-            second_person = self.cleaned_data.get('second_person')
-            lookup1 = Q(first_person=first_person) & Q(second_person=second_person)
-            lookup2 = Q(first_person=second_person) & Q(second_person=first_person)
-            lookup = Q(lookup1 | lookup2)
-            qs = Thread.objects.filter(lookup)
-            if qs.exists():
-                raise ValidationError(f'Thread between {first_person} and {second_person} already exists.')
+class ChatMessage(admin.TabularInline):
+    model = Message
 
 
 
+class ThreadAdmin(admin.ModelAdmin):
+    inlines = [ChatMessage]
 
-admin.site.register(Thread)
+    class Meta:
+        model = Thread
+
+
+admin.site.register(Thread, ThreadAdmin)
 admin.site.register(Message)
