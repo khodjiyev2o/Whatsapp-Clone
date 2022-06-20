@@ -2,7 +2,7 @@ import json
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import Room,Message
+from .models import Message
 from django.contrib.auth.models import User
 
 """
