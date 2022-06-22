@@ -63,8 +63,3 @@ class MessageTestCase(TestCase):
 
         self.assertTrue(thread_test(messages,samandar,anvarov))
 
-
-    def test_index(self):
-        client = Client()
-        response = client.get('chat')
-        self.assertEqual(response.status_code,200)
