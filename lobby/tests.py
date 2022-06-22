@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import Message,Thread
 from django.contrib.auth.models import User
+from django.test import Client
 # Create your tests here.
 
 
@@ -61,3 +62,9 @@ class MessageTestCase(TestCase):
             return True
 
         self.assertTrue(thread_test(messages,samandar,anvarov))
+
+
+    def test_index(self):
+        client = Client()
+        response = client.get('chat')
+        self.assertEqual(response.status_code,200)
