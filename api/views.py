@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import Thread, Message
 from .serializers import UserSerializer,MessageSerializer,ThreadSerializer
 
-# Create your views here.
+# Create your views here. hello 
 
 @api_view(['GET'])
 def usersapi(request):
