@@ -2,5 +2,7 @@
 from django.urls import path
 from . import views
 urlpatterns = [
-    path('users/',views.UsersApi)
+    path('users/',views.usersapi),
+    path('messages/', views.messagesapi)
+
 ]
